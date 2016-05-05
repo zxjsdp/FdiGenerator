@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env pythonw
 # -*- coding: utf-8 -*-
 
 """Modify Fdi files"""
@@ -40,14 +40,15 @@ MAX_CIRC_RADIUS = '100'
 BORDER_COLOR = '0'
 INFO_LINE_STYLE = "    %4d / %4d:\t|\t%18s\t|\t%15s"
 
-DATA_FILE = 'data.txt'
-INFO_FILE = 'info.txt'
-
 OUT_DIR = os.path.abspath('./output')
 IMAGE_DIR = os.path.abspath('./images')
-for each_dir in [OUT_DIR, IMAGE_DIR]:
+INFO_DIR = os.path.abspath('./info')
+for each_dir in [OUT_DIR, IMAGE_DIR, INFO_DIR]:
     if not os.path.isdir(each_dir):
         os.mkdir(each_dir)
+
+PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
+INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
 APP_TITLE = 'Fdi Generator'
 CHOOSE_COLOR_BUTTON_TEXT = 'Choose Color'
@@ -390,7 +391,7 @@ class App(tk.Frame):
         self.fdi_name = ''
 
         # Create GUI
-        self.master.geometry('1200x800')
+        self.master.geometry('800x600')
         self.master.title(APP_TITLE)
         self.set_style()
         self.create_widgets()
@@ -403,6 +404,11 @@ class App(tk.Frame):
         s = ttk.Style()
         # Configure button style
         s.configure('TButton', padding=5)
+        s.configure(
+            'execute.TButton',
+            foreground='red',
+        )
+
         s.configure('TLable', padding=5)
         s.configure('TEntry', padding=5)
 
@@ -454,7 +460,9 @@ class App(tk.Frame):
                                              name_list=self.name_list)
 
         # Execute button
-        self.execute_button = ttk.Button(self.execute_pane, text=EXECUTE_BUTTON_TEXT)
+        self.execute_button = ttk.Button(self.execute_pane,
+                                         text=EXECUTE_BUTTON_TEXT,
+                                         style='execute.TButton')
         self.status_var = tk.StringVar()
         self.status_label = ttk.Label(self.execute_pane,
                                       textvariable=self.status_var,
@@ -537,8 +545,10 @@ class App(tk.Frame):
         # Check parameters
         if self._check_params():
             # Remove title line from matrix
-            processing_raw_data(self.excel_matrix[1:], DATA_FILE)
-            generate_info_file(DATA_FILE, INFO_FILE, self.name_list,
+            processing_raw_data(self.excel_matrix[1:], PROCESSING_DATA_FILE)
+            generate_info_file(PROCESSING_DATA_FILE,
+                               INFO_FILE,
+                               self.name_list,
                                self.dynamic_area.choosed_color_dict)
             out_file = self.output_file_entry.get().strip()
             generate_new_fdi(self.fdi_name, INFO_FILE, out_file)
