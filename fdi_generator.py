@@ -9,6 +9,9 @@ from __future__ import (print_function, unicode_literals,
 import os
 import sys
 
+import openpyxl
+import logging
+
 if sys.version[0] == '2':
     import Tkinter as tk
     import ttk
@@ -31,6 +34,39 @@ DEFALT_CHOOSE_FDI_LABEL_TEXT = 'Please choose fdi file'
 OUTPUT_FILE_LABEL_TEXT = 'Output fdi file'
 DEFAULT_OUTPUT_FILE = 'output.fdi'
 EXECUTE_BUTTON_TEXT = 'Execute'
+
+
+class XlsxFile(object):
+    """
+    Handel xlsx files and return a matrix of content.
+    """
+    def __init__(self, excel_file):
+        try:
+            self.wb = openpyxl.load_workbook(excel_file)
+        # Invalid xlsx format
+        except openpyxl.utils.exceptions.InvalidFileException as e:
+            logging.error("Invalid xlsx format.\n%s" % e)
+            sys.exit(1)
+        except IOError as e:
+            logging.error("No such xlsx file: %s. (%s)" % (excel_file, e))
+            sys.exit(1)
+        except BaseException as e:
+            logging.error(e)
+            sys.exit(1)
+
+        # self.ws = self.wb.get_active_sheet()
+        self.ws = self.wb.active
+        self.ws_title = self.ws.title
+        self.matrix = []
+        self._get_matrix()
+
+    def _get_matrix(self):
+        """Get a two dimensional matrix from the xlsx file."""
+        for i, row in enumerate(self.ws.rows):
+            row_container = []
+            for i, cell in enumerate(row):
+                row_container.append(cell.value)
+            self.matrix.append(tuple(row_container))
 
 
 class ColorChooseFrame(tk.Frame):
@@ -60,6 +96,7 @@ class ColorChooseFrame(tk.Frame):
         self.bind_function()
 
     def set_style(self):
+        """Set custom style for widget."""
         pass
 
     def create_widgets(self):
@@ -118,7 +155,9 @@ class App(tk.Frame):
         tk.Frame.__init__(self, master)
 
         # Data
-        self.name_list = ['SpeciesA', 'SpeciesB', 'SpeciesC', 'SpeciesD']
+        self.name_list = ['Please select excel file first!!']
+        self.excel_matrix = []
+        self.fdi_content = ''
 
         # Create GUI
         self.master.geometry('1200x800')
@@ -244,14 +283,24 @@ class App(tk.Frame):
             return
         excel_name = c.name
         self.display_excel_var.set(os.path.basename(excel_name))
+        self.excel_matrix = XlsxFile(excel_name).matrix
+        self.refresh_dynamic_area(self.excel_matrix[0])
 
     def _read_fdi_file(self):
         c = tkFileDialog.askopenfile(mode='rb')
         if c is None:
             # No file selected
             return
-        excel_name = c.name
-        self.display_fdi_var.set(os.path.basename(excel_name))
+        fdi_name = c.name
+        self.display_fdi_var.set(os.path.basename(fdi_name))
+        with open(fdi_name, 'r') as f:
+            self.fdi_content = f.read()
+
+    def refresh_dynamic_area(self, new_name_list):
+        if self.dynamic_area is not None:
+            self.dynamic_area.destroy()
+        self.dynamic_area = ColorChooseFrame(self.color_choose_pane, new_name_list)
+        self.dynamic_area.grid(row=0, column=0, columnspan=6, sticky='wens')
 
 
 def main():
