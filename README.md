@@ -7,12 +7,12 @@ A GUI tool for quickly generating new fdi files with different proportions and c
 Screenshot
 ----------
 
-[Fdi Generator](resources/fdi_generator.png)
+![Fdi Generator](resources/fdi_generator.png)
 
 Display fdi files with Network program
 --------------------------------------
 
-[Display fdi files with Network](resources/display_fdi_with_network.png)
+![Display fdi files with Network](resources/display_fdi_with_network.png)
 
 Usage
 -----
