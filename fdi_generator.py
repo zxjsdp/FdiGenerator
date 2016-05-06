@@ -532,11 +532,11 @@ class App(tk.Frame):
         self.refresh_dynamic_area(self.excel_matrix[0])
 
     def _read_fdi_file(self):
-        c = tkFileDialog.askopenfile(mode='rb')
-        if c is None:
+        filename = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
+        if filename is None:
             # No file selected
             return
-        self.fdi_name = c.name
+        self.fdi_name = filename
         self.display_fdi_var.set(os.path.basename(self.fdi_name))
         self.output_file_entry.delete('0', 'end')
         self.output_file_entry.insert('0', os.path.basename(self.fdi_name))
