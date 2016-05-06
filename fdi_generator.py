@@ -24,15 +24,13 @@ if sys.version[0] == '2':
     import Tkinter as tk
     import ttk
     import tkFileDialog
-    import ScrolledText as st
     from tkColorChooser import askcolor
     import tkMessageBox
 elif sys.version[0] == '3':
     import tkinter as tk
     from tkinter import ttk
-    import tkinter.scrolledtext as st
     from tkinter import filedialog as tkFileDialog
-    from tkinter import tkMessageBox
+    from tkinter import messagebox as tkMessageBox
     from tkinter.colorchooser import askcolor
 
 MIN_LIMIT = 1
