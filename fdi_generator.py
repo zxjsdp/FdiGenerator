@@ -60,15 +60,34 @@ OUTPUT_FILE_LABEL_TEXT = 'Output fdi file'
 DEFAULT_OUTPUT_FILE = 'output.fdi'
 EXECUTE_BUTTON_TEXT = 'Execute'
 
-NO_EXCEL_FILE_ERROR_TITLE = 'Execl error'
-NO_EXCEL_FILE_ERROR_MESSAGE = 'No Execl file was selected'
+CHOOSED_XLSX_FILE = 'Selected xlsx file: '
+CHOOSED_FDI_FILE = 'Selected fdi file: '
+
+NO_XLSX_FILE_ERROR_TITLE = 'Excel error'
+NO_XLSX_FILE_ERROR_MESSAGE = 'No xlsx file was selected'
 NO_FDI_FILE_ERROR_TITLE = 'Fdi error'
 NO_FDI_FILE_ERROR_MESSAGE = 'No Fdi file was selected!'
+WRONG_XLSX_FILE_ERROR_TITLE = 'File type error'
+WRONG_XLSX_FILE_ERROR_MESSAGE = 'Xlsx file must be endswith .xlsx extension'
+WRONG_FDI_FILE_ERROR_TITLE = 'File type error'
+WRONG_FDI_FILE_ERROR_MESSAGE = 'Fdi file Must be endswith .fdi extension'
+INVALID_XLSX_FILE_ERROR_TITLE = 'Execl error'
+INVALID_XLSX_FILE_ERROR_MESSAGE = 'No Execl file was selected'
 NOT_ALL_COLOR_CHOOSED_ERROR_TITLE = 'Color choose error'
 NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE = 'Not all colors were choosed!'
 NO_OUTFILE_ERROR_TITLE = 'Output file error'
 NO_OUTFILE_ERROR_MESSAGE = 'No valid output file was specified!'
-
+XLSX_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
+XLSX_FIRST_LINE_ERROR_MESSAGE = ('First line of Xlsx file must be title '
+                                 '(rather than digit)')
+XLSX_NOT_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
+XLSX_NOT_FIRST_LINE_ERROR_MESSAGE = ('All cells from second line in xlsx files '
+                                     'must be digit (rather than alpha)')
+STARTING_VALIDATING_DATA_INFO = 'Start validating data...'
+FINISHED_VALIDATING_DATA_INFO = 'Finished data validation'
+RAW_DATA_PROCESSED_INFO = 'Raw data processed!'
+INFO_FILE_PROCESSED_INFO = 'Info file generated'
+FDI_FILE_GENERATED_INFO = 'New fdf file generated'
 
 
 def save_color_image(color_rgb_tuple_str, color_name):
@@ -388,7 +407,9 @@ class App(tk.Frame):
         # Data
         self.name_list = []
         self.excel_matrix = []
+        self.excel_name = ''
         self.fdi_name = ''
+        self.dynamic_area = None
 
         # Create GUI
         self.master.geometry('800x600')
@@ -521,13 +542,14 @@ class App(tk.Frame):
         self.execute_button['command'] = self._execute
 
     def _read_excel_file(self):
-        c = tkFileDialog.askopenfile(mode='rb')
-        if c is None:
+        self.excel_name = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
+        if self.excel_name is None:
             # No file selected
             return
-        excel_name = c.name
-        self.display_excel_var.set(os.path.basename(excel_name))
-        self.excel_matrix = XlsxFile(excel_name).matrix
+        self.display_excel_var.set(os.path.basename(self.excel_name))
+        self._set_status_var_text(CHOOSED_XLSX_FILE +
+                                  os.path.basename(self.excel_name))
+        self.excel_matrix = XlsxFile(self.excel_name).matrix
         self.name_list = list(self.excel_matrix[0])
         self.refresh_dynamic_area(self.excel_matrix[0])
 
@@ -538,44 +560,145 @@ class App(tk.Frame):
             return
         self.fdi_name = filename
         self.display_fdi_var.set(os.path.basename(self.fdi_name))
+        self._set_status_var_text(CHOOSED_FDI_FILE +
+                                  os.path.basename(self.fdi_name))
         self.output_file_entry.delete('0', 'end')
         self.output_file_entry.insert('0', os.path.basename(self.fdi_name))
 
     def _execute(self):
         # Check parameters
         if self._check_params():
-            # Remove title line from matrix
-            processing_raw_data(self.excel_matrix[1:], PROCESSING_DATA_FILE)
-            generate_info_file(PROCESSING_DATA_FILE,
-                               INFO_FILE,
-                               self.name_list,
-                               self.dynamic_area.choosed_color_dict)
-            out_file = self.output_file_entry.get().strip()
-            generate_new_fdi(self.fdi_name, INFO_FILE, out_file)
-            self.status_var.set('Done! Output file: ./output/%s' %
-                                os.path.basename(out_file))
-        else:
-            self.status_var.set('ERROR!')
+            try:
+                # Remove title line from matrix
+                processing_raw_data(self.excel_matrix[1:], PROCESSING_DATA_FILE)
+                self._set_status_var_text(RAW_DATA_PROCESSED_INFO)
+
+                generate_info_file(PROCESSING_DATA_FILE,
+                                   INFO_FILE,
+                                   self.name_list,
+                                   self.dynamic_area.choosed_color_dict)
+                self._set_status_var_text(INFO_FILE_PROCESSED_INFO)
+
+                out_file = self.output_file_entry.get().strip()
+                generate_new_fdi(self.fdi_name, INFO_FILE, out_file)
+                self._set_status_var_text(FDI_FILE_GENERATED_INFO)
+
+                self._set_status_var_text('Done!  Output file:  ./output/%s' %
+                                    os.path.basename(out_file))
+            except Exception as e:
+                self._display_error("ERROR: %s" % e)
 
     def _check_params(self):
-        if not self.excel_matrix:
-            tkMessageBox.showerror(NO_EXCEL_FILE_ERROR_TITLE,
-                                   NO_EXCEL_FILE_ERROR_MESSAGE)
+        self._set_status_var_text(STARTING_VALIDATING_DATA_INFO)
+
+        # Check if excel file already choosed
+        if not self.excel_name:
+            self._display_error(
+                NO_XLSX_FILE_ERROR_TITLE,
+                NO_XLSX_FILE_ERROR_MESSAGE
+            )
             return False
+
+        # Check if fdi file was choosed
         if not self.fdi_name:
-            tkMessageBox.showerror(NO_FDI_FILE_ERROR_TITLE,
-                                   NO_FDI_FILE_ERROR_MESSAGE)
+            self._display_error(
+                NO_FDI_FILE_ERROR_TITLE,
+                NO_FDI_FILE_ERROR_MESSAGE
+            )
             return False
+
+        # Check if file extension is xlsx
+        if not os.path.basename(self.excel_name).lower().endswith('xlsx'):
+            self._display_error(
+                WRONG_XLSX_FILE_ERROR_TITLE,
+                WRONG_XLSX_FILE_ERROR_MESSAGE
+            )
+            return False
+
+        # Check if file extension is fdi
+        if not os.path.basename(self.fdi_name).lower().endswith('fdi'):
+            self._display_error(
+                WRONG_FDI_FILE_ERROR_TITLE,
+                WRONG_FDI_FILE_ERROR_MESSAGE
+            )
+            return False
+
+        # Check content of xlsx file
+        if not self._validate_excel_matrix():
+            return False
+
+        # Check if data was successfully extracted from excel file
+        if not self.excel_matrix:
+            self._display_error(
+                INVALID_XLSX_FILE_ERROR_TITLE,
+                INVALID_XLSX_FILE_ERROR_MESSAGE
+            )
+            return False
+
+        # Check if all categories have colors
         if len(self.name_list) != len(self.dynamic_area.choosed_color_dict):
-            tkMessageBox.showerror(NOT_ALL_COLOR_CHOOSED_ERROR_TITLE,
-                                   NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE)
+            self._display_error(
+                NOT_ALL_COLOR_CHOOSED_ERROR_TITLE,
+                NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE
+            )
             return False
+
+        # Check if no output file name in output file name entry
         out_file = self.output_file_entry.get().strip()
         if not out_file:
-            tkMessageBox.showerror(NO_OUTFILE_ERROR_TITLE,
-                                   NO_OUTFILE_ERROR_MESSAGE)
+            self._display_error(
+                NO_OUTFILE_ERROR_TITLE,
+                NO_OUTFILE_ERROR_MESSAGE
+            )
             return False
+
+        self._set_status_var_text(FINISHED_VALIDATING_DATA_INFO)
+
+        # All check passed
         return True
+
+    def _validate_excel_matrix(self):
+        # Check if number of elements of excel lines are the same
+        each_tuple_len_list = [len(each_tuple) for each_tuple
+                               in self.excel_matrix]
+        if len(set(each_tuple_len_list)) != 1:
+            self._display_error(
+                INVALID_XLSX_FILE_ERROR_TITLE,
+                INVALID_XLSX_FILE_ERROR_MESSAGE
+            )
+            return False
+
+        # Check if first line is title
+        # MUST startswith alpha rather than digit
+        if not self.excel_matrix[0][0].isalpha():
+            self._display_error(
+                XLSX_FIRST_LINE_ERROR_TITLE,
+                XLSX_FIRST_LINE_ERROR_MESSAGE
+            )
+
+        # Check if all cells (except those in first line) is digit
+        for each_tuple in self.excel_matrix[1:]:
+            for cell in each_tuple:
+                try:
+                    float(cell)
+                except ValueError:
+                    self._display_error(
+                        XLSX_NOT_FIRST_LINE_ERROR_TITLE,
+                        XLSX_NOT_FIRST_LINE_ERROR_MESSAGE
+                    )
+                    return False
+
+        # All xlsx checks passed
+        return True
+
+    def _set_status_var_text(self, text):
+        self.status_var.set(text)
+        self.status_label.update_idletasks()
+
+    def _display_error(self, title, message):
+        message = 'ERROR: ' + message
+        self._set_status_var_text(message)
+        tkMessageBox.showerror(title, message)
 
     def refresh_dynamic_area(self, new_name_list):
         if self.dynamic_area is not None:
