@@ -74,7 +74,7 @@ NO_OUTFILE_ERROR_MESSAGE = 'No valid output file was specified!'
 def save_color_image(color_rgb_tuple_str, color_name):
     """Draw an image with specied color."""
     color_rgb_tuple = tuple([
-        int(x) for x in
+        int(float(x)) for x in
         color_rgb_tuple_str.replace('(', '').replace(')', '').split(',')])
     if Image:
         image = Image.new('RGB', (200, 200), color_rgb_tuple)
@@ -105,9 +105,9 @@ def rgb_to_rgb_value(rgb_tuple_str):
         (https://msdn.microsoft.com/en-us/library/dd355244.aspx)
     """
     r_value, g_value, b_value = [
-        int(x) for x in
+        float(x) for x in
         rgb_tuple_str.replace('(', '').replace(')', '').split(',')]
-    return r_value + (g_value * 256) + (b_value * 256 * 256)
+    return int(r_value + (g_value * 256) + (b_value * 256 * 256))
 
 
 def processing_raw_data(raw_matrix_without_title, data_file):
