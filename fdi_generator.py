@@ -52,12 +52,14 @@ PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
 INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
 APP_TITLE = 'Fdi Generator'
-CHOOSE_COLOR_BUTTON_TEXT = 'Choose Color'
-CHOOSE_EXCEL_BUTTON_TEXT = 'Choose Excel File'
-DEFALT_CHOOSE_EXCEL_LABEL_TEXT = 'Please choose excel file'
-CHOOSE_FDI_BUTTON_TEXT = 'Choose Fdi file'
-DEFALT_CHOOSE_FDI_LABEL_TEXT = 'Please choose fdi file'
-OUTPUT_FILE_LABEL_TEXT = 'Output fdi file'
+CHOOSE_COLOR_BUTTON_TEXT = 'Browse Color...'
+CHOOSE_EXCEL_LABEL_TEXT = 'Choose Excel file: '
+CHOOSE_EXCEL_BUTTON_TEXT = 'Browse xlsx...'
+DEFALT_CHOOSE_EXCEL_LABEL_TEXT = '...'
+CHOOSE_FDI_LABEL_TEXT = 'Choose fdi file: '
+CHOOSE_FDI_BUTTON_TEXT = 'Browse fdi...'
+DEFALT_CHOOSE_FDI_LABEL_TEXT = '...'
+OUTPUT_FILE_LABEL_TEXT = 'Output fdi filename: '
 DEFAULT_OUTPUT_FILE = 'output.fdi'
 EXECUTE_BUTTON_TEXT = 'Execute'
 
@@ -68,10 +70,6 @@ NO_XLSX_FILE_ERROR_TITLE = 'Excel error'
 NO_XLSX_FILE_ERROR_MESSAGE = 'No xlsx file was selected'
 NO_FDI_FILE_ERROR_TITLE = 'Fdi error'
 NO_FDI_FILE_ERROR_MESSAGE = 'No Fdi file was selected!'
-WRONG_XLSX_FILE_ERROR_TITLE = 'File type error'
-WRONG_XLSX_FILE_ERROR_MESSAGE = 'Xlsx file must be endswith .xlsx extension'
-WRONG_FDI_FILE_ERROR_TITLE = 'File type error'
-WRONG_FDI_FILE_ERROR_MESSAGE = 'Fdi file Must be endswith .fdi extension'
 INVALID_XLSX_FILE_ERROR_TITLE = 'Execl error'
 INVALID_XLSX_FILE_ERROR_MESSAGE = 'No Execl file was selected'
 NOT_ALL_COLOR_CHOOSED_ERROR_TITLE = 'Color choose error'
@@ -153,8 +151,6 @@ def processing_raw_data(raw_matrix_without_title, data_file):
 
 def generate_info_file(data_file, info_file, name_list, color_dict):
     """Generate info_file."""
-    print(name_list)
-    print(color_dict)
     out_list = []
     with open(data_file, 'r') as f_in:
         lines = [x.strip() for x in f_in.readlines() if x.strip()]
@@ -348,7 +344,8 @@ class ColorChooseFrame(tk.Frame):
 
     def set_style(self):
         """Set custom style for widget."""
-        pass
+        s = ttk.Style()
+        s.configure('color.TButton', padding=0)
 
     def create_widgets(self):
         """Create widgets for dynamically color choose pane
@@ -368,23 +365,29 @@ class ColorChooseFrame(tk.Frame):
         for name in self.name_list:
             self.name_lebels.append(ttk.Label(self.master, text=name))
             self.buttons.append(ttk.Button(self.master,
-                                           text=CHOOSE_COLOR_BUTTON_TEXT))
+                                           text=CHOOSE_COLOR_BUTTON_TEXT,
+                                           style='color.TButton'))
             self.colored_bg_labels.append(ttk.Label(self.master,
-                                                    background='grey'))
+                                                    background='#FFFFFF'))
 
     def grid_config(self):
-        """Grid configurations"""
-        self.master.grid()
+        """Grid configurations
+
+        Three columns.
+        """
         for i, name in enumerate(self.name_lebels):
             name.grid(row=i, column=0, sticky='we')
-            self.buttons[i].grid(row=i, column=1, sticky='e')
+            self.buttons[i].grid(row=i, column=1, sticky='we')
             self.colored_bg_labels[i].grid(row=i, column=2, sticky='we')
 
     def row_and_column_config(self):
         """Row and column configurations"""
+        # Row configs
         for i, name in enumerate(self.name_lebels):
             self.master.rowconfigure(i, weight=0)
-        for i in range(6):
+
+        # Column configs
+        for i in range(3):
             self.master.columnconfigure(i, weight=1)
 
     def bind_function(self):
@@ -405,9 +408,21 @@ class ColorChooseFrame(tk.Frame):
         if not color[0]:
             return
         self.choosed_color_dict[self.name_list[i]] = color[0]
-        self.colored_bg_labels[i].config(text=str(color[0]) + '\t' +
-                                              str(color[1]),
-                                         background=color[1],)
+        self.colored_bg_labels[i].config(
+            text='%17s %8s' % (str(color[0]), str(color[1])),
+            background=color[1],
+            font='Monospace'
+        )
+
+    def destroy_all_inner_widgets(self):
+        """Destroy all name_labels, buttons and color_labels to show new ones.
+        """
+        for name_label in self.name_lebels:
+            name_label.destroy()
+        for button in self.buttons:
+            button.destroy()
+        for color_label in self.colored_bg_labels:
+            color_label.destroy()
 
 
 class App(tk.Frame):
@@ -434,14 +449,20 @@ class App(tk.Frame):
         """Set custom style for widget."""
         s = ttk.Style()
         # Configure button style
-        s.configure('TButton', padding=5)
+        s.configure('TButton', padding=(3, 10))
         s.configure(
             'execute.TButton',
             foreground='red',
         )
 
-        s.configure('TLable', padding=5)
-        s.configure('TEntry', padding=5)
+        s.configure('TLable', padding=(3, 10))
+        s.configure(
+            'status.TLabel',
+            padding=10,
+            foreground='#2E64FE'
+        )
+
+        s.configure('TEntry', padding=(3, 10))
 
     def create_widgets(self):
         """Create GUI widgets.
@@ -463,6 +484,8 @@ class App(tk.Frame):
         self.execute_pane = ttk.Frame(self.master, padding=8)
 
         # Excel file related lable and button
+        self.choose_excel_label = ttk.Label(self.config_pane,
+                                            text=CHOOSE_EXCEL_LABEL_TEXT)
         self.choose_excel_button = ttk.Button(self.config_pane,
                                               text=CHOOSE_EXCEL_BUTTON_TEXT)
         self.display_excel_var = tk.StringVar()
@@ -472,6 +495,8 @@ class App(tk.Frame):
         self.display_excel_var.set(DEFALT_CHOOSE_EXCEL_LABEL_TEXT)
 
         # Fdi file related lable and button
+        self.choose_fdi_label = ttk.Label(self.config_pane,
+                                          text=CHOOSE_FDI_LABEL_TEXT)
         self.choose_fdi_button = ttk.Button(self.config_pane,
                                             text=CHOOSE_FDI_BUTTON_TEXT)
         self.display_fdi_var = tk.StringVar()
@@ -497,7 +522,7 @@ class App(tk.Frame):
         self.status_var = tk.StringVar()
         self.status_label = ttk.Label(self.execute_pane,
                                       textvariable=self.status_var,
-                                      style='config.TLabel')
+                                      style='status.TLabel')
 
     def grid_config(self):
         """Grid configurations"""
@@ -507,43 +532,48 @@ class App(tk.Frame):
         self.color_choose_pane.grid(row=1, column=0, sticky='wens')
         self.execute_pane.grid(row=2, column=0, sticky='wens')
 
-        self.choose_excel_button.grid(row=0, column=0, sticky='we')
-        self.display_excel_label.grid(row=0, column=1, sticky='we')
+        # config_pane
+        self.choose_excel_label.grid(row=0, column=0, sticky='we')
+        self.choose_excel_button.grid(row=0, column=1, sticky='we')
+        self.display_excel_label.grid(row=0, column=2, sticky='we')
 
-        self.choose_fdi_button.grid(row=1, column=0, sticky='we')
-        self.display_fdi_label.grid(row=1, column=1, sticky='we')
+        self.choose_fdi_label.grid(row=1, column=0, sticky='we')
+        self.choose_fdi_button.grid(row=1, column=1, sticky='we')
+        self.display_fdi_label.grid(row=1, column=2, sticky='we')
 
         self.output_file_label.grid(row=2, column=0, sticky='we')
         self.output_file_entry.grid(row=2, column=1, sticky='we')
 
-        self.dynamic_area.grid(row=0, column=0, columnspan=6, sticky='wens')
+        # color_choose_pane
+        self.dynamic_area.grid(row=0, column=0, columnspan=3, sticky='wens')
 
-        self.execute_button.grid(row=0, column=0, sticky='w')
-        self.status_label.grid(row=0, column=1, sticky='we')
+        # execute_pane
+        self.execute_button.grid(row=0, column=0, columnspan=3, sticky='we')
+        self.status_label.grid(row=1, column=0, columnspan=3, sticky='we')
 
     def row_and_column_config(self):
         """Row and column configurations"""
         self.master.rowconfigure(0, weight=0)
         self.master.rowconfigure(1, weight=0)
-        self.master.rowconfigure(0, weight=0)
-        for i in range(6):
-            self.master.columnconfigure(0, weight=1)
+        self.master.rowconfigure(2, weight=0)
+        self.master.columnconfigure(0, weight=1)
 
         # config_pane
         for i in range(3):
             self.config_pane.rowconfigure(i, weight=0)
-        for i in range(6):
+        for i in range(3):
             self.config_pane.columnconfigure(i, weight=1)
 
         # color choose pane
         for i, name in enumerate(self.name_list):
             self.color_choose_pane.rowconfigure(i, weight=0)
-        for i in range(6):
+        for i in range(3):
             self.color_choose_pane.columnconfigure(i, weight=1)
 
         # execute pane
         self.execute_pane.rowconfigure(0, weight=0)
-        for i in range(6):
+        self.execute_pane.rowconfigure(1, weight=0)
+        for i in range(3):
             self.execute_pane.columnconfigure(i, weight=1)
 
     def bind_functions(self):
@@ -554,21 +584,24 @@ class App(tk.Frame):
 
     def _read_excel_file(self):
         """Select and read excel file"""
-        self.excel_name = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
-        if self.excel_name is None:
+        self.excel_name = tkFileDialog.askopenfilename(
+            filetypes=[("Xlsx files", "xlsx")])
+        if not self.excel_name:
             # No file selected
             return
         self.display_excel_var.set(os.path.basename(self.excel_name))
         self._set_status_var_text(CHOOSED_XLSX_FILE +
                                   os.path.basename(self.excel_name))
         self.excel_matrix = XlsxFile(self.excel_name).matrix
-        self.name_list = list(self.excel_matrix[0])
-        self.refresh_dynamic_area(self.excel_matrix[0])
+        if self._validate_excel_matrix():
+            self.name_list = list(self.excel_matrix[0])
+            self.refresh_dynamic_area(self.excel_matrix[0])
 
     def _read_fdi_file(self):
         """Select and read fdi file"""
-        filename = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
-        if filename is None:
+        filename = tkFileDialog.askopenfilename(
+            filetypes=[("Fdi files", "fdi")])
+        if not filename:
             # No file selected
             return
         self.fdi_name = filename
@@ -622,26 +655,6 @@ class App(tk.Frame):
             )
             return False
 
-        # Check if file extension is xlsx
-        if not os.path.basename(self.excel_name).lower().endswith('xlsx'):
-            self._display_error(
-                WRONG_XLSX_FILE_ERROR_TITLE,
-                WRONG_XLSX_FILE_ERROR_MESSAGE
-            )
-            return False
-
-        # Check if file extension is fdi
-        if not os.path.basename(self.fdi_name).lower().endswith('fdi'):
-            self._display_error(
-                WRONG_FDI_FILE_ERROR_TITLE,
-                WRONG_FDI_FILE_ERROR_MESSAGE
-            )
-            return False
-
-        # Check content of xlsx file
-        if not self._validate_excel_matrix():
-            return False
-
         # Check if data was successfully extracted from excel file
         if not self.excel_matrix:
             self._display_error(
@@ -686,11 +699,17 @@ class App(tk.Frame):
 
         # Check if first line is title
         # MUST startswith alpha rather than digit
-        if not self.excel_matrix[0][0].isalpha():
-            self._display_error(
-                XLSX_FIRST_LINE_ERROR_TITLE,
-                XLSX_FIRST_LINE_ERROR_MESSAGE
-            )
+        for cell in self.excel_matrix[0]:
+            try:
+                float(cell)
+            except ValueError:
+                continue
+            else:
+                self._display_error(
+                    XLSX_FIRST_LINE_ERROR_TITLE,
+                    XLSX_FIRST_LINE_ERROR_MESSAGE
+                )
+                return False
 
         # Check if all cells (except those in first line) is digit
         for each_tuple in self.excel_matrix[1:]:
@@ -722,10 +741,14 @@ class App(tk.Frame):
         """Dynamically refresh color choose area.
         Generate new buttons and labels according to number of categories.
         """
-        if self.dynamic_area is not None:
-            self.dynamic_area.destroy()
-        self.dynamic_area = ColorChooseFrame(self.color_choose_pane, new_name_list)
-        self.dynamic_area.grid(row=0, column=0, columnspan=6, sticky='wens')
+        self.dynamic_area.destroy_all_inner_widgets()
+        self.dynamic_area.destroy()
+        self.dynamic_area = ColorChooseFrame(self.color_choose_pane,
+                                             new_name_list)
+        for i, name in enumerate(new_name_list):
+            self.dynamic_area.grid(row=i, column=0, columnspan=3,
+                                   sticky='wens')
+        self.dynamic_area.update_idletasks()
 
 
 def main():
