@@ -7,6 +7,7 @@ from __future__ import (print_function, unicode_literals,
                         with_statement)
 
 import sys
+# Use zipimport to satisfy requirements
 sys.path.insert(0, 'library.zip')
 
 import os
@@ -350,7 +351,7 @@ class ColorChooseFrame(tk.Frame):
         pass
 
     def create_widgets(self):
-        """
+        """Create widgets for dynamically color choose pane
         +------------------------------------------------+
         |                                                |
         |                                                |
@@ -372,6 +373,7 @@ class ColorChooseFrame(tk.Frame):
                                                     background='grey'))
 
     def grid_config(self):
+        """Grid configurations"""
         self.master.grid()
         for i, name in enumerate(self.name_lebels):
             name.grid(row=i, column=0, sticky='we')
@@ -379,17 +381,25 @@ class ColorChooseFrame(tk.Frame):
             self.colored_bg_labels[i].grid(row=i, column=2, sticky='we')
 
     def row_and_column_config(self):
+        """Row and column configurations"""
         for i, name in enumerate(self.name_lebels):
             self.master.rowconfigure(i, weight=0)
         for i in range(6):
             self.master.columnconfigure(i, weight=1)
 
     def bind_function(self):
+        """Bind functions to each button.
+
+        Use defualt parameter in lambda function to avoid variable bug:
+        If no default paramter, value of i will always be value of the last i
+        button['command'] = lambda i=i: self._ask_color(i)
+        """
         for i, label in enumerate(self.name_lebels):
             button = self.buttons[i]
             button['command'] = lambda i=i: self._ask_color(i)
 
     def _ask_color(self, i):
+        """Popup a color pane to choose color"""
         # ((0, 255, 64), '#00ff40')
         color = askcolor()
         if not color[0]:
@@ -434,7 +444,7 @@ class App(tk.Frame):
         s.configure('TEntry', padding=5)
 
     def create_widgets(self):
-        """
+        """Create GUI widgets.
         +------------------------------------------------+
         |                                                |
         |                                                |
@@ -489,8 +499,8 @@ class App(tk.Frame):
                                       textvariable=self.status_var,
                                       style='config.TLabel')
 
-
     def grid_config(self):
+        """Grid configurations"""
         self.master.grid()
 
         self.config_pane.grid(row=0, column=0, sticky='wens')
@@ -511,8 +521,8 @@ class App(tk.Frame):
         self.execute_button.grid(row=0, column=0, sticky='w')
         self.status_label.grid(row=0, column=1, sticky='we')
 
-
     def row_and_column_config(self):
+        """Row and column configurations"""
         self.master.rowconfigure(0, weight=0)
         self.master.rowconfigure(1, weight=0)
         self.master.rowconfigure(0, weight=0)
@@ -537,11 +547,13 @@ class App(tk.Frame):
             self.execute_pane.columnconfigure(i, weight=1)
 
     def bind_functions(self):
+        """Bind functions to buttons"""
         self.choose_excel_button['command'] = self._read_excel_file
         self.choose_fdi_button['command'] = self._read_fdi_file
         self.execute_button['command'] = self._execute
 
     def _read_excel_file(self):
+        """Select and read excel file"""
         self.excel_name = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
         if self.excel_name is None:
             # No file selected
@@ -554,6 +566,7 @@ class App(tk.Frame):
         self.refresh_dynamic_area(self.excel_matrix[0])
 
     def _read_fdi_file(self):
+        """Select and read fdi file"""
         filename = tkFileDialog.askopenfilename(filetypes=[("allfiles", "*")])
         if filename is None:
             # No file selected
@@ -566,6 +579,7 @@ class App(tk.Frame):
         self.output_file_entry.insert('0', os.path.basename(self.fdi_name))
 
     def _execute(self):
+        """Do validation and execution"""
         # Check parameters
         if self._check_params():
             try:
@@ -589,6 +603,7 @@ class App(tk.Frame):
                 self._display_error("ERROR: %s" % e)
 
     def _check_params(self):
+        """Validate files and contents before running"""
         self._set_status_var_text(STARTING_VALIDATING_DATA_INFO)
 
         # Check if excel file already choosed
@@ -658,6 +673,7 @@ class App(tk.Frame):
         return True
 
     def _validate_excel_matrix(self):
+        """Validate content of xlsx file"""
         # Check if number of elements of excel lines are the same
         each_tuple_len_list = [len(each_tuple) for each_tuple
                                in self.excel_matrix]
@@ -692,15 +708,20 @@ class App(tk.Frame):
         return True
 
     def _set_status_var_text(self, text):
+        """Display information on status label"""
         self.status_var.set(text)
         self.status_label.update_idletasks()
 
     def _display_error(self, title, message):
+        """Display information on status label and messagebox"""
         message = 'ERROR: ' + message
         self._set_status_var_text(message)
         tkMessageBox.showerror(title, message)
 
     def refresh_dynamic_area(self, new_name_list):
+        """Dynamically refresh color choose area.
+        Generate new buttons and labels according to number of categories.
+        """
         if self.dynamic_area is not None:
             self.dynamic_area.destroy()
         self.dynamic_area = ColorChooseFrame(self.color_choose_pane, new_name_list)
@@ -708,9 +729,7 @@ class App(tk.Frame):
 
 
 def main():
-    # app = ColorChooseFrame(name_list=['SpeciesA', 'SpeciesB', 'SpeciesC'])
-    # app.mainloop()
-
+    """Main GUI function"""
     app = App()
     app.mainloop()
 
