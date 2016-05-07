@@ -31,7 +31,7 @@ Usage:
 - Unzip and double click `FdiGenerator.pyw` or `fdi_generator.py` to run.
 - If you want to see error messages, `cd` to the dir where python script is in and run this command on terminal (recommended):
 
-      python fdi_generator.py
+        python fdi_generator.py
 
 Excel syntax
 -------------
