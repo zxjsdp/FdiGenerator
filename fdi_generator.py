@@ -108,9 +108,6 @@ def save_color_image(color_rgb_tuple_str, color_name):
         draw = ImageDraw.Draw(image)
         image_file = os.path.join(IMAGE_DIR, '%s.png' % color_name)
         image.save(image_file)
-    else:
-        print('Please intall pillow to draw images with species names\n\n'
-              '>>> pip install pillow')
 
 
 def rgb_to_rgb_value(rgb_tuple_str):
@@ -221,7 +218,6 @@ class HandleFdi(object):
             lines = [x.strip() for x in f_in.readlines() if x.strip()]
 
         for line in lines:
-            print(line)
             if line.startswith("Hap_"):
                 temp_hap_name = line.rstrip(':')
                 self.info_dict[temp_hap_name] = []
