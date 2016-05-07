@@ -27,9 +27,9 @@ Prerequisites:
 
 Usage:
 
-- Download the zip file: [FdiGenerator]()
-- Unzip and double click `fdi_generator.pyw` or `fdi_generator.py` to run.
-- If you want to see error messages, `cd` to the dir where python script is in and run this on terminal (recommended):
+- Download the zip file: [FdiGenerator.zip](https://github.com/zxjsdp/bioinfo-scripts/raw/master/Haplotype_Related/FdiGenerator/FdiGenerator.zip)
+- Unzip and double click `FdiGenerator.pyw` or `fdi_generator.py` to run.
+- If you want to see error messages, `cd` to the dir where python script is in and run this command on terminal (recommended):
 
       python fdi_generator.py
 
