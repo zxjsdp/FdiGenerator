@@ -12,26 +12,39 @@ Screenshot
 Display fdi files with Network program
 --------------------------------------
 
-![Display fdi files with Network](resources/display_fdi_with_network.png)
+Display fdi file with [Network program](http://www.fluxus-engineering.com/sharenet.htm):
 
-Usage
------
+![Display fdi file with Network](resources/display_fdi_with_network.png)
 
-1. For Windows users, please install Python 2 / Python 3 before running this program.
-2. For Linux & Mac OSX users, Pyton was preinstalled.
-3. Double click to run.
+Prerequisites and Usage
+-----------------------
+
+Prerequisites:
+
+- For Windows users, please install Python 2 / Python 3 before running this program.
+- For Linux & Mac OSX users, Pyton was preinstalled.
+- If you have Python library `pillow` installed, there will be images files generated after you execute the program (`pip install pillow`).
+
+Usage:
+
+- Download the zip file: [FdiGenerator]()
+- Unzip and double click `fdi_generator.pyw` or `fdi_generator.py` to run.
+- If you want to see error messages, `cd` to the dir where python script is in and run this on terminal (recommended):
+
+      python fdi_generator.py
 
 Excel syntax
 -------------
 
-MUST BE `xlsx` format!
+- MUST BE `xlsx` format!
+- First line should be names (color selector for each name will be generated automatically after xlsx file was selected)
+- Lines from second line should be numbers
 
 Sample:
 
-    Antarctica	Arctic	Green	Alaska
-    0.106520 	2.365131 	7.454275 	0.017415
-    0.000000 	0.039667 	0.077022 	0.011195
-    0.025198 	0.000000 	0.000000 	0.000000
-    0.374540 	0.295435 	0.257368 	12.098841
-    ...         ...         ...         ...
-
+    Antarctica    Arctic      Green       Alaska
+    0.106520      2.365131    7.454275    0.017415
+    0.000000      0.039667    0.077022    0.011195
+    0.025198      0.000000    0.000000    0.000000
+    0.374540      0.295435    0.257368    12.098841
+    ...           ...         ...         ...
