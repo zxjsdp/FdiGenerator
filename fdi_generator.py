@@ -34,6 +34,7 @@ elif sys.version[0] == '3':
     from tkinter import messagebox as tkMessageBox
     from tkinter.colorchooser import askcolor
 
+IGNORE_LIMIT = 0
 MIN_LIMIT = 1
 MAX_LIMIT = 700
 MIN_CIRC_RADIUS = '10'
@@ -137,8 +138,10 @@ def processing_raw_data(raw_matrix_without_title, data_file):
     for each_tuple in raw_matrix_without_title:
         number_list = [float(x) for x in each_tuple]
         for i, number in enumerate(number_list):
-            if 0 < number < MIN_LIMIT:
-                number_list[i] = MIN_LIMIT
+            if number <= IGNORE_LIMIT:
+                number_list[i] = 0
+            elif IGNORE_LIMIT < number < MIN_LIMIT:
+                number_list[i] = int(round(MIN_LIMIT))
             elif number > MAX_LIMIT:
                 number_list[i] = int(round(MAX_LIMIT))
             else:
