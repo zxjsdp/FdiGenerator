@@ -21,9 +21,9 @@ Prerequisites and Usage
 
 Prerequisites:
 
-- For Windows users, please install Python 2 / Python 3 before running this program.
-- For Linux & Mac OSX users, Pyton was preinstalled.
-- If you have Python library `pillow` installed, there will be images files generated after you execute the program (`pip install pillow`).
+- For Windows users, please install [Python2](https://www.python.org/downloads/) or [Python3](https://www.python.org/downloads/) before running this program.
+- For Linux & Mac OSX users, Python was already installed.
+- If you have Python library `pillow` installed, there will be images files generated in `images` folder after you execute the program (`pip install pillow`).
 
 Usage:
 
