@@ -562,19 +562,19 @@ class App(tk.Frame):
         for i in range(3):
             self.config_pane.rowconfigure(i, weight=0)
         for i in range(3):
-            self.config_pane.columnconfigure(i, weight=1)
+            self.config_pane.columnconfigure(i, weight=1, uniform='fred')
 
         # color choose pane
         for i, name in enumerate(self.name_list):
             self.color_choose_pane.rowconfigure(i, weight=0)
         for i in range(3):
-            self.color_choose_pane.columnconfigure(i, weight=1)
+            self.color_choose_pane.columnconfigure(i, weight=1, uniform='fred')
 
         # execute pane
         self.execute_pane.rowconfigure(0, weight=0)
         self.execute_pane.rowconfigure(1, weight=0)
         for i in range(3):
-            self.execute_pane.columnconfigure(i, weight=1)
+            self.execute_pane.columnconfigure(i, weight=1, uniform='fred')
 
     def bind_functions(self):
         """Bind functions to buttons"""
