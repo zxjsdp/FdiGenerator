@@ -40,7 +40,7 @@ MAX_LIMIT = 700
 MIN_CIRC_RADIUS = '10'
 MAX_CIRC_RADIUS = '100'
 BORDER_COLOR = '0'
-INFO_LINE_STYLE = "    %4d / %4d:\t|\t%18s\t|\t%15s"
+INFO_LINE_STYLE = "%4d / %4d |%18s |%20s"
 
 OUT_DIR = os.path.abspath('./output')
 IMAGE_DIR = os.path.abspath('./images')
@@ -53,13 +53,21 @@ PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
 INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
 APP_TITLE = 'Fdi Generator'
+DEFAULT_GEOMETRY = '1000x750'
 CHOOSE_COLOR_BUTTON_TEXT = 'Browse Color...'
 CHOOSE_EXCEL_LABEL_TEXT = 'Choose Excel file: '
-CHOOSE_EXCEL_BUTTON_TEXT = 'Browse xlsx...'
+CHOOSE_EXCEL_BUTTON_TEXT = 'Browse xlsx file...'
 DEFALT_CHOOSE_EXCEL_LABEL_TEXT = '...'
 CHOOSE_FDI_LABEL_TEXT = 'Choose fdi file: '
-CHOOSE_FDI_BUTTON_TEXT = 'Browse fdi...'
+CHOOSE_FDI_BUTTON_TEXT = 'Browse fdi file...'
 DEFALT_CHOOSE_FDI_LABEL_TEXT = '...'
+IGNORE_LIMIT_LABEL_TEXT = 'Ignore Limit: '
+MIN_LIMIT_LABEL_TEXT = 'Minimum Limit: '
+MAX_LIMIT_LABEL_TEXT = 'Maximum Limit: '
+MIN_CIRC_RADIUS_LABEL_TEXT = 'Minimum Circle Radius: '
+MAX_CIRC_RADIUS_LABEL_TEXT = 'Maximum Circle Radius: '
+BORDER_COLOR_LABEL_TEXT = 'Border Color: '
+INFO_LINE_STYLE_LABEL_TEXT = 'Info Line Style (info.txt): '
 OUTPUT_FILE_LABEL_TEXT = 'Output fdi filename: '
 DEFAULT_OUTPUT_FILE = 'output.fdi'
 EXECUTE_BUTTON_TEXT = 'Execute'
@@ -440,7 +448,7 @@ class App(tk.Frame):
         self.dynamic_area = None
 
         # Create GUI
-        self.master.geometry('800x600')
+        self.master.geometry(DEFAULT_GEOMETRY)
         self.master.title(APP_TITLE)
         self.set_style()
         self.create_widgets()
@@ -512,9 +520,52 @@ class App(tk.Frame):
                                            text=OUTPUT_FILE_LABEL_TEXT)
         self.output_file_entry = ttk.Entry(self.config_pane, )
 
-        self.output_file_entry.insert('0', DEFAULT_OUTPUT_FILE)
+        # IGNORE_LIMIT
+        self.ignore_limit_label = ttk.Label(
+            self.config_pane, text=IGNORE_LIMIT_LABEL_TEXT)
+        self.ignore_limit_entry = ttk.Entry(self.config_pane)
 
-        # Dynamically allocated area
+        # MIN_LIMIT
+        self.min_limit_label = ttk.Label(
+            self.config_pane, text=MIN_LIMIT_LABEL_TEXT)
+        self.min_limit_entry = ttk.Entry(self.config_pane)
+
+        # MAX_LIMIT
+        self.max_limit_label = ttk.Label(
+            self.config_pane, text=MAX_LIMIT_LABEL_TEXT)
+        self.max_limit_entry = ttk.Entry(self.config_pane)
+
+        # MIN_CIRC_RADIUS
+        self.min_circ_radius_label = ttk.Label(
+            self.config_pane, text=MIN_CIRC_RADIUS_LABEL_TEXT)
+        self.min_circ_radius_entry = ttk.Entry(self.config_pane)
+
+        # MAX_CIRC_RADIUS
+        self.max_circ_radius_label = ttk.Label(
+            self.config_pane, text=MAX_CIRC_RADIUS_LABEL_TEXT)
+        self.max_circ_radius_entry = ttk.Entry(self.config_pane)
+
+        # BORDER_COLOR
+        self.border_color_label = ttk.Label(
+            self.config_pane, text=BORDER_COLOR_LABEL_TEXT)
+        self.border_color_entry = ttk.Entry(self.config_pane)
+
+        # INFO_LINE_STYLE
+        self.info_line_style_label = ttk.Label(
+            self.config_pane, text=INFO_LINE_STYLE_LABEL_TEXT)
+        self.info_line_style_entry = ttk.Entry(self.config_pane)
+
+        # Insert default values
+        self.output_file_entry.insert('0', DEFAULT_OUTPUT_FILE)
+        self.ignore_limit_entry.insert('0', IGNORE_LIMIT)
+        self.min_limit_entry.insert('0', MIN_LIMIT)
+        self.max_limit_entry.insert('0', MAX_LIMIT)
+        self.min_circ_radius_entry.insert('0', MIN_CIRC_RADIUS)
+        self.max_circ_radius_entry.insert('0', MAX_CIRC_RADIUS)
+        self.border_color_entry.insert('0', BORDER_COLOR)
+        self.info_line_style_entry.insert('0', INFO_LINE_STYLE)
+
+        # Dynamic Area
         self.dynamic_area = ColorChooseFrame(self.color_choose_pane,
                                              name_list=self.name_list)
 
@@ -544,8 +595,31 @@ class App(tk.Frame):
         self.choose_fdi_button.grid(row=1, column=1, sticky='we')
         self.display_fdi_label.grid(row=1, column=2, sticky='we')
 
+        # Output filename
         self.output_file_label.grid(row=2, column=0, sticky='we')
         self.output_file_entry.grid(row=2, column=1, sticky='we')
+
+        # Other configs
+        self.ignore_limit_label.grid(row=3, column=0, sticky='we')
+        self.ignore_limit_entry.grid(row=3, column=1, sticky='we')
+
+        self.min_limit_label.grid(row=4, column=0, sticky='we')
+        self.min_limit_entry.grid(row=4, column=1, sticky='we')
+
+        self.max_limit_label.grid(row=5, column=0, sticky='we')
+        self.max_limit_entry.grid(row=5, column=1, sticky='we')
+
+        self.min_circ_radius_label.grid(row=6, column=0, sticky='we')
+        self.min_circ_radius_entry.grid(row=6, column=1, sticky='we')
+
+        self.max_circ_radius_label.grid(row=7, column=0, sticky='we')
+        self.max_circ_radius_entry.grid(row=7, column=1, sticky='we')
+
+        self.border_color_label.grid(row=8, column=0, sticky='we')
+        self.border_color_entry.grid(row=8, column=1, sticky='we')
+
+        self.info_line_style_label.grid(row=9, column=0, sticky='we')
+        self.info_line_style_entry.grid(row=9, column=1, sticky='we')
 
         # color_choose_pane
         self.dynamic_area.grid(row=0, column=0, columnspan=3, sticky='wens')
@@ -614,11 +688,29 @@ class App(tk.Frame):
         self.output_file_entry.delete('0', 'end')
         self.output_file_entry.insert('0', os.path.basename(self.fdi_name))
 
+    def _read_configs(self):
+        global IGNORE_LIMIT
+        global MIN_LIMIT
+        global MAX_LIMIT
+        global MIN_CIRC_RADIUS
+        global MAX_CIRC_RADIUS
+        global BORDER_COLOR
+        global INFO_LINE_STYLE
+
+        IGNORE_LIMIT = float(self.ignore_limit_entry.get())
+        MIN_LIMIT = float(self.min_limit_entry.get())
+        MAX_LIMIT = float(self.max_limit_entry.get())
+        MIN_CIRC_RADIUS = str(self.min_circ_radius_entry.get())
+        MAX_CIRC_RADIUS = str(self.max_circ_radius_entry.get())
+        BORDER_COLOR = str(self.border_color_entry.get())
+        INFO_LINE_STYLE = str(self.info_line_style_entry.get())
+
     def _execute(self):
         """Do validation and execution"""
         # Check parameters
         if self._check_params():
             try:
+                self._read_configs()
                 # Remove title line from matrix
                 processing_raw_data(self.excel_matrix[1:], PROCESSING_DATA_FILE)
                 self._set_status_var_text(RAW_DATA_PROCESSED_INFO)
