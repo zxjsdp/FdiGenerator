@@ -1,8 +1,18 @@
 #!/bin/bash
 
 # Script for zip latest FdiGenerator related files for download
+# This script must be called as:
+#  scripts/generate_zip_file_for_download.sh
 
 UNAMES="$(uname -s)"
+
+# Check if run this script in the right directory
+if [ ! -e fdi_generator.py ]
+then
+    echo "Run this script in the same folder with fdi_generator.py"
+    echo "  Usage: scripts/generate_zip_file_for_download.sh"
+    exit
+fi
 
 # Import fdi_generator.py to get .pyc bytecode file
 echo "Generating .pyc file..."
