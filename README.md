@@ -33,6 +33,10 @@ Usage:
 
         python fdi_generator.py
 
+Demo GIF:
+
+![FdiGenerator GIF](resources/FdiGenerator.gif)
+
 Excel syntax
 -------------
 
