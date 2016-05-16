@@ -97,6 +97,10 @@ XLSX_FIRST_LINE_ERROR_MESSAGE = ('First line of Xlsx file must be title '
 XLSX_NOT_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
 XLSX_NOT_FIRST_LINE_ERROR_MESSAGE = ('All cells from second line in xlsx files '
                                      'must be digit (rather than alpha)')
+XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE = 'Data inconsistent error'
+XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE = \
+    'Xlsx data inconsistent with Hap_* numbers in fdi file'
+
 STARTING_VALIDATING_DATA_INFO = 'Start validating data...'
 FINISHED_VALIDATING_DATA_INFO = 'Finished data validation'
 RAW_DATA_PROCESSED_INFO = 'Raw data processed!'
@@ -747,7 +751,7 @@ class App(tk.Frame):
                 self._set_status_var_text('Done!  Output file:  ./output/%s' %
                                     os.path.basename(out_file))
             except Exception as e:
-                self._display_error("ERROR", "ERROR: %s" % e)
+                self._display_error("ERROR", e)
 
     def _check_params(self):
         """Validate files and contents before running"""
@@ -794,6 +798,10 @@ class App(tk.Frame):
             )
             return False
 
+        # Check if hap numbers in fdi file is consistent with xlsx data
+        if not self._validate_xlsx_consistent_with_fdi():
+            return False
+
         self._set_status_var_text(FINISHED_VALIDATING_DATA_INFO)
 
         # All check passed
@@ -838,6 +846,22 @@ class App(tk.Frame):
                     return False
 
         # All xlsx checks passed
+        return True
+
+    def _validate_xlsx_consistent_with_fdi(self):
+        """Check if data numbers is in accordance with fdi Hap numbers"""
+        with open(self.fdi_name, 'r') as f_in:
+            content = f_in.read()
+
+        re_hap_numbers = re.compile(r'TAXON_NAME;H_.*')
+        hap_lines = re_hap_numbers.findall(content)
+        print(len(hap_lines))
+        print(len(self.excel_matrix))
+        if len(hap_lines) != (len(self.excel_matrix) - 1):
+            self._display_error(
+                XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE,
+                XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE)
+            return False
         return True
 
     def _set_status_var_text(self, text):
