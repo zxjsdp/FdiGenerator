@@ -3,6 +3,8 @@ Fdi Generator
 
 A GUI tool for quickly generating new fdi files with different proportions and colors.
 
+**WARNING**: This program was originally a part of [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repository. For maintenance convenience, it was seperated out to this standalone repo. Further updates will be posted here, rather than in [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repo.
+
 
 Screenshot
 ----------
