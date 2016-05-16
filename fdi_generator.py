@@ -35,6 +35,9 @@ elif sys.version[0] == '3':
     from tkinter import messagebox as tkMessageBox
     from tkinter.colorchooser import askcolor
 
+__version__ = '0.1.0'
+__auther__ = 'Jin'
+
 IGNORE_LIMIT = 0
 MIN_LIMIT = 1
 MAX_LIMIT = 700
@@ -58,7 +61,7 @@ for each_dir in [OUT_DIR, IMAGE_DIR, INFO_DIR]:
 PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
 INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
-APP_TITLE = 'Fdi Generator'
+APP_TITLE = 'Fdi Generator v%s' % __version__
 DEFAULT_GEOMETRY = '1000x750'
 CHOOSE_COLOR_BUTTON_TEXT = 'Browse Color...'
 CHOOSE_EXCEL_LABEL_TEXT = 'Choose Excel file: '
