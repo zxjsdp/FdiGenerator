@@ -11,6 +11,10 @@ Screenshot
 
 ![Fdi Generator](resources/fdi_generator.png)
 
+Demo GIF:
+
+![FdiGenerator GIF](resources/FdiGenerator.gif)
+
 Display fdi files with Network program
 --------------------------------------
 
@@ -34,10 +38,6 @@ Usage:
 - If you want to see error messages, `cd` to the dir where python script is in and run this command on terminal (recommended):
 
         python fdi_generator.py
-
-Demo GIF:
-
-![FdiGenerator GIF](resources/FdiGenerator.gif)
 
 Excel syntax
 -------------
