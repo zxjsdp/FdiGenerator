@@ -94,6 +94,8 @@ NOT_ALL_COLOR_CHOOSED_ERROR_TITLE = 'Color choose error'
 NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE = 'Not all colors were choosed!'
 NO_OUTFILE_ERROR_TITLE = 'Output file error'
 NO_OUTFILE_ERROR_MESSAGE = 'No valid output file was specified!'
+BLANK_CELL_ERROR_TITLE = 'Xlsx content error'
+BLANK_CELL_ERROR_MESSAGE = 'Blank or invalid xlsx cell (Row: %d, Column: %d)'
 XLSX_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
 XLSX_FIRST_LINE_ERROR_MESSAGE = ('First line of Xlsx file must be title '
                                  '(rather than digit)')
@@ -824,11 +826,17 @@ class App(tk.Frame):
 
         # Check if first line is title
         # MUST startswith alpha rather than digit
-        for cell in self.excel_matrix[0]:
+        for i, cell in enumerate(self.excel_matrix[0]):
             try:
                 float(cell)
             except ValueError:
                 continue
+            except TypeError:
+                self._display_error(
+                    BLANK_CELL_ERROR_TITLE,
+                    BLANK_CELL_ERROR_MESSAGE % (1, i+1)
+                )
+                return False
             else:
                 self._display_error(
                     XLSX_FIRST_LINE_ERROR_TITLE,
@@ -837,14 +845,20 @@ class App(tk.Frame):
                 return False
 
         # Check if all cells (except those in first line) is digit
-        for each_tuple in self.excel_matrix[1:]:
-            for cell in each_tuple:
+        for i, each_tuple in enumerate(self.excel_matrix[1:]):
+            for j, cell in enumerate(each_tuple):
                 try:
                     float(cell)
                 except ValueError:
                     self._display_error(
                         XLSX_NOT_FIRST_LINE_ERROR_TITLE,
                         XLSX_NOT_FIRST_LINE_ERROR_MESSAGE
+                    )
+                    return False
+                except TypeError:
+                    self._display_error(
+                        BLANK_CELL_ERROR_TITLE,
+                        BLANK_CELL_ERROR_MESSAGE % (i+2, j+1)
                     )
                     return False
 
