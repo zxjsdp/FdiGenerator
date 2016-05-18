@@ -98,10 +98,11 @@ BLANK_CELL_ERROR_TITLE = 'Xlsx content error'
 BLANK_CELL_ERROR_MESSAGE = 'Blank or invalid xlsx cell (Row: %d, Column: %d)'
 XLSX_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
 XLSX_FIRST_LINE_ERROR_MESSAGE = ('First line of Xlsx file must be title '
-                                 '(rather than digit)')
+                                 '(rather than digit) (Row: %d, Column: %d))')
 XLSX_NOT_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
-XLSX_NOT_FIRST_LINE_ERROR_MESSAGE = ('All cells from second line in xlsx files '
-                                     'must be digit (rather than alpha)')
+XLSX_NOT_FIRST_LINE_ERROR_MESSAGE = ('Xlsx Cells not in first line must be '
+                                     'digit (rather than alpha or blank '
+                                     'string) (Row: %d, Column: %d)')
 XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE = 'Data inconsistent error'
 XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE = \
     'Xlsx data inconsistent with Hap_* numbers in fdi file'
@@ -840,7 +841,7 @@ class App(tk.Frame):
             else:
                 self._display_error(
                     XLSX_FIRST_LINE_ERROR_TITLE,
-                    XLSX_FIRST_LINE_ERROR_MESSAGE
+                    XLSX_FIRST_LINE_ERROR_MESSAGE % (1, i+1)
                 )
                 return False
 
@@ -852,7 +853,7 @@ class App(tk.Frame):
                 except ValueError:
                     self._display_error(
                         XLSX_NOT_FIRST_LINE_ERROR_TITLE,
-                        XLSX_NOT_FIRST_LINE_ERROR_MESSAGE
+                        XLSX_NOT_FIRST_LINE_ERROR_MESSAGE % (i+2, j+1)
                     )
                     return False
                 except TypeError:
