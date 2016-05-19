@@ -61,6 +61,15 @@ for each_dir in [OUT_DIR, IMAGE_DIR, INFO_DIR]:
 PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
 INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
+EN_DICT = {
+    'info': {},
+    'buttons': {},
+    'labels': {},
+    'errors': {},
+}
+
+DICT_NOW = EN_DICT
+
 APP_TITLE = 'Fdi Generator v%s' % __version__
 DEFAULT_GEOMETRY = '1000x750'
 CHOOSE_COLOR_BUTTON_TEXT = 'Browse Color...'
