@@ -62,65 +62,73 @@ PROCESSING_DATA_FILE = os.path.join(INFO_DIR, 'data.txt')
 INFO_FILE = os.path.join(INFO_DIR, 'info.txt')
 
 EN_DICT = {
-    'info': {},
-    'buttons': {},
-    'labels': {},
-    'errors': {},
+    'basic': {
+        'APP_TITLE': 'Fdi Generator v%s' % __version__,
+        'DEFAULT_GEOMETRY': '1000x750',
+    },
+    'io': {
+        'DEFAULT_OUTPUT_FILE': 'output.fdi',
+    },
+    'buttons': {
+        'CHOOSE_COLOR_BUTTON_TEXT': 'Browse Color...',
+        'CHOOSE_EXCEL_BUTTON_TEXT': 'Browse xlsx file...',
+        'CHOOSE_FDI_BUTTON_TEXT': 'Browse fdi file...',
+        'EXECUTE_BUTTON_TEXT': 'Execute',
+    },
+    'labels': {
+        'CHOOSE_EXCEL_LABEL_TEXT': 'Choose Excel file: ',
+        'DEFALT_CHOOSE_EXCEL_LABEL_TEXT': '...',
+        'CHOOSE_FDI_LABEL_TEXT': 'Choose fdi file: ',
+        'DEFALT_CHOOSE_FDI_LABEL_TEXT': '...',
+        'IGNORE_LIMIT_LABEL_TEXT': 'Ignore Limit: ',
+        'MIN_LIMIT_LABEL_TEXT': 'Minimum Limit: ',
+        'MAX_LIMIT_LABEL_TEXT': 'Maximum Limit: ',
+        'MIN_CIRC_RADIUS_LABEL_TEXT': 'Minimum Circle Radius: ',
+        'MAX_CIRC_RADIUS_LABEL_TEXT': 'Maximum Circle Radius: ',
+        'BORDER_COLOR_LABEL_TEXT': 'Border Color: ',
+        'INFO_LINE_STYLE_LABEL_TEXT': 'Info Line Style (info.txt): ',
+        'OUTPUT_FILE_LABEL_TEXT': 'Output fdi filename: ',
+    },
+    'errors': {
+        'NO_XLSX_FILE_ERROR_TITLE': 'Excel error',
+        'NO_XLSX_FILE_ERROR_MESSAGE': 'No xlsx file was selected',
+        'NO_FDI_FILE_ERROR_TITLE': 'Fdi error',
+        'NO_FDI_FILE_ERROR_MESSAGE': 'No Fdi file was selected!',
+        'INVALID_XLSX_FILE_ERROR_TITLE': 'Execl error',
+        'INVALID_XLSX_FILE_ERROR_MESSAGE': 'No Execl file was selected',
+        'NOT_ALL_COLOR_CHOOSED_ERROR_TITLE': 'Color choose error',
+        'NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE': 'Not all colors were choosed!',
+        'NO_OUTFILE_ERROR_TITLE': 'Output file error',
+        'NO_OUTFILE_ERROR_MESSAGE': 'No valid output file was specified!',
+        'BLANK_CELL_ERROR_TITLE': 'Xlsx content error',
+        'BLANK_CELL_ERROR_MESSAGE': ('Blank or invalid xlsx cell '
+                                     '(Row: %d, Column: %d)'),
+        'XLSX_FIRST_LINE_ERROR_TITLE': 'Xlsx content error',
+        'XLSX_FIRST_LINE_ERROR_MESSAGE': ('First line of Xlsx file must be '
+                                          'title (rather than digit) '
+                                          '(Row: %d, Column: %d))'),
+        'XLSX_NOT_FIRST_LINE_ERROR_TITLE': 'Xlsx content error',
+        'XLSX_NOT_FIRST_LINE_ERROR_MESSAGE': ('Xlsx Cells not in first line '
+                                              'must be digit (rather than '
+                                              'alpha or blank string) '
+                                              '(Row: %d, Column: %d)'),
+        'XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE':
+            'Data inconsistent error',
+        'XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE':
+            'Xlsx data inconsistent with Hap_* numbers in fdi file',
+    },
+    'info': {
+        'CHOOSED_XLSX_FILE': 'Selected xlsx file: ',
+        'CHOOSED_FDI_FILE': 'Selected fdi file: ',
+        'STARTING_VALIDATING_DATA_INFO': 'Start validating data...',
+        'FINISHED_VALIDATING_DATA_INFO': 'Finished data validation',
+        'RAW_DATA_PROCESSED_INFO': 'Raw data processed!',
+        'INFO_FILE_PROCESSED_INFO': 'Info file generated',
+        'FDI_FILE_GENERATED_INFO': 'New fdf file generated'
+    }
 }
 
 DICT_NOW = EN_DICT
-
-APP_TITLE = 'Fdi Generator v%s' % __version__
-DEFAULT_GEOMETRY = '1000x750'
-CHOOSE_COLOR_BUTTON_TEXT = 'Browse Color...'
-CHOOSE_EXCEL_LABEL_TEXT = 'Choose Excel file: '
-CHOOSE_EXCEL_BUTTON_TEXT = 'Browse xlsx file...'
-DEFALT_CHOOSE_EXCEL_LABEL_TEXT = '...'
-CHOOSE_FDI_LABEL_TEXT = 'Choose fdi file: '
-CHOOSE_FDI_BUTTON_TEXT = 'Browse fdi file...'
-DEFALT_CHOOSE_FDI_LABEL_TEXT = '...'
-IGNORE_LIMIT_LABEL_TEXT = 'Ignore Limit: '
-MIN_LIMIT_LABEL_TEXT = 'Minimum Limit: '
-MAX_LIMIT_LABEL_TEXT = 'Maximum Limit: '
-MIN_CIRC_RADIUS_LABEL_TEXT = 'Minimum Circle Radius: '
-MAX_CIRC_RADIUS_LABEL_TEXT = 'Maximum Circle Radius: '
-BORDER_COLOR_LABEL_TEXT = 'Border Color: '
-INFO_LINE_STYLE_LABEL_TEXT = 'Info Line Style (info.txt): '
-OUTPUT_FILE_LABEL_TEXT = 'Output fdi filename: '
-DEFAULT_OUTPUT_FILE = 'output.fdi'
-EXECUTE_BUTTON_TEXT = 'Execute'
-
-CHOOSED_XLSX_FILE = 'Selected xlsx file: '
-CHOOSED_FDI_FILE = 'Selected fdi file: '
-
-NO_XLSX_FILE_ERROR_TITLE = 'Excel error'
-NO_XLSX_FILE_ERROR_MESSAGE = 'No xlsx file was selected'
-NO_FDI_FILE_ERROR_TITLE = 'Fdi error'
-NO_FDI_FILE_ERROR_MESSAGE = 'No Fdi file was selected!'
-INVALID_XLSX_FILE_ERROR_TITLE = 'Execl error'
-INVALID_XLSX_FILE_ERROR_MESSAGE = 'No Execl file was selected'
-NOT_ALL_COLOR_CHOOSED_ERROR_TITLE = 'Color choose error'
-NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE = 'Not all colors were choosed!'
-NO_OUTFILE_ERROR_TITLE = 'Output file error'
-NO_OUTFILE_ERROR_MESSAGE = 'No valid output file was specified!'
-BLANK_CELL_ERROR_TITLE = 'Xlsx content error'
-BLANK_CELL_ERROR_MESSAGE = 'Blank or invalid xlsx cell (Row: %d, Column: %d)'
-XLSX_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
-XLSX_FIRST_LINE_ERROR_MESSAGE = ('First line of Xlsx file must be title '
-                                 '(rather than digit) (Row: %d, Column: %d))')
-XLSX_NOT_FIRST_LINE_ERROR_TITLE = 'Xlsx content error'
-XLSX_NOT_FIRST_LINE_ERROR_MESSAGE = ('Xlsx Cells not in first line must be '
-                                     'digit (rather than alpha or blank '
-                                     'string) (Row: %d, Column: %d)')
-XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE = 'Data inconsistent error'
-XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE = \
-    'Xlsx data inconsistent with Hap_* numbers in fdi file'
-
-STARTING_VALIDATING_DATA_INFO = 'Start validating data...'
-FINISHED_VALIDATING_DATA_INFO = 'Finished data validation'
-RAW_DATA_PROCESSED_INFO = 'Raw data processed!'
-INFO_FILE_PROCESSED_INFO = 'Info file generated'
-FDI_FILE_GENERATED_INFO = 'New fdf file generated'
 
 
 def save_color_image(color_rgb_tuple_str, color_name):
@@ -413,9 +421,10 @@ class ColorChooseFrame(tk.Frame):
         """
         for name in self.name_list:
             self.name_lebels.append(ttk.Label(self.master, text=name))
-            self.buttons.append(ttk.Button(self.master,
-                                           text=CHOOSE_COLOR_BUTTON_TEXT,
-                                           style='color.TButton'))
+            self.buttons.append(ttk.Button(
+                self.master,
+                text=DICT_NOW.get('buttons').get('CHOOSE_COLOR_BUTTON_TEXT'),
+                style='color.TButton'))
             self.colored_bg_labels.append(ttk.Label(self.master,
                                                     background='#FFFFFF'))
 
@@ -486,8 +495,8 @@ class App(tk.Frame):
         self.dynamic_area = None
 
         # Create GUI
-        self.master.geometry(DEFAULT_GEOMETRY)
-        self.master.title(APP_TITLE)
+        self.master.geometry(DICT_NOW.get('basic').get('DEFAULT_GEOMETRY'))
+        self.master.title(DICT_NOW.get('basic').get('APP_TITLE'))
         self.set_style()
         self.create_widgets()
         self.grid_config()
@@ -533,68 +542,83 @@ class App(tk.Frame):
         self.execute_pane = ttk.Frame(self.master, padding=8)
 
         # Excel file related lable and button
-        self.choose_excel_label = ttk.Label(self.config_pane,
-                                            text=CHOOSE_EXCEL_LABEL_TEXT)
-        self.choose_excel_button = ttk.Button(self.config_pane,
-                                              text=CHOOSE_EXCEL_BUTTON_TEXT)
+        self.choose_excel_label = ttk.Label(
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('CHOOSE_EXCEL_LABEL_TEXT'))
+        self.choose_excel_button = ttk.Button(
+            self.config_pane,
+            text=DICT_NOW.get('buttons').get('CHOOSE_EXCEL_BUTTON_TEXT'))
         self.display_excel_var = tk.StringVar()
         self.display_excel_label = ttk.Label(self.config_pane,
                                              textvariable=self.display_excel_var,
                                              style='config.TLabel')
-        self.display_excel_var.set(DEFALT_CHOOSE_EXCEL_LABEL_TEXT)
+        self.display_excel_var.set(DICT_NOW.get(
+            'labels').get('DEFALT_CHOOSE_EXCEL_LABEL_TEXT'))
 
         # Fdi file related lable and button
-        self.choose_fdi_label = ttk.Label(self.config_pane,
-                                          text=CHOOSE_FDI_LABEL_TEXT)
-        self.choose_fdi_button = ttk.Button(self.config_pane,
-                                            text=CHOOSE_FDI_BUTTON_TEXT)
+        self.choose_fdi_label = ttk.Label(
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('CHOOSE_FDI_LABEL_TEXT'))
+        self.choose_fdi_button = ttk.Button(
+            self.config_pane,
+            text=DICT_NOW.get('buttons').get('CHOOSE_FDI_BUTTON_TEXT'))
         self.display_fdi_var = tk.StringVar()
         self.display_fdi_label = ttk.Label(self.config_pane,
                                            textvariable=self.display_fdi_var)
-        self.display_fdi_var.set(DEFALT_CHOOSE_FDI_LABEL_TEXT)
+        self.display_fdi_var.set(
+            DICT_NOW.get('labels').get('DEFALT_CHOOSE_FDI_LABEL_TEXT'))
 
         # Output file line
-        self.output_file_label = ttk.Label(self.config_pane,
-                                           text=OUTPUT_FILE_LABEL_TEXT)
+        self.output_file_label = ttk.Label(
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('OUTPUT_FILE_LABEL_TEXT'))
         self.output_file_entry = ttk.Entry(self.config_pane, )
 
         # IGNORE_LIMIT
         self.ignore_limit_label = ttk.Label(
-            self.config_pane, text=IGNORE_LIMIT_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('IGNORE_LIMIT_LABEL_TEXT'))
         self.ignore_limit_entry = ttk.Entry(self.config_pane)
 
         # MIN_LIMIT
         self.min_limit_label = ttk.Label(
-            self.config_pane, text=MIN_LIMIT_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('MIN_LIMIT_LABEL_TEXT'))
         self.min_limit_entry = ttk.Entry(self.config_pane)
 
         # MAX_LIMIT
         self.max_limit_label = ttk.Label(
-            self.config_pane, text=MAX_LIMIT_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('MAX_LIMIT_LABEL_TEXT'))
         self.max_limit_entry = ttk.Entry(self.config_pane)
 
         # MIN_CIRC_RADIUS
         self.min_circ_radius_label = ttk.Label(
-            self.config_pane, text=MIN_CIRC_RADIUS_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('MIN_CIRC_RADIUS_LABEL_TEXT'))
         self.min_circ_radius_entry = ttk.Entry(self.config_pane)
 
         # MAX_CIRC_RADIUS
         self.max_circ_radius_label = ttk.Label(
-            self.config_pane, text=MAX_CIRC_RADIUS_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('MAX_CIRC_RADIUS_LABEL_TEXT'))
         self.max_circ_radius_entry = ttk.Entry(self.config_pane)
 
         # BORDER_COLOR
         self.border_color_label = ttk.Label(
-            self.config_pane, text=BORDER_COLOR_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('BORDER_COLOR_LABEL_TEXT'))
         self.border_color_entry = ttk.Entry(self.config_pane)
 
         # INFO_LINE_STYLE
         self.info_line_style_label = ttk.Label(
-            self.config_pane, text=INFO_LINE_STYLE_LABEL_TEXT)
+            self.config_pane,
+            text=DICT_NOW.get('labels').get('INFO_LINE_STYLE_LABEL_TEXT'))
         self.info_line_style_entry = ttk.Entry(self.config_pane)
 
         # Insert default values
-        self.output_file_entry.insert('0', DEFAULT_OUTPUT_FILE)
+        self.output_file_entry.insert(
+            '0', DICT_NOW.get('io').get('DEFAULT_OUTPUT_FILE'))
         self.ignore_limit_entry.insert('0', IGNORE_LIMIT)
         self.min_limit_entry.insert('0', MIN_LIMIT)
         self.max_limit_entry.insert('0', MAX_LIMIT)
@@ -608,9 +632,10 @@ class App(tk.Frame):
                                              name_list=self.name_list)
 
         # Execute button
-        self.execute_button = ttk.Button(self.execute_pane,
-                                         text=EXECUTE_BUTTON_TEXT,
-                                         style='execute.TButton')
+        self.execute_button = ttk.Button(
+            self.execute_pane,
+            text=DICT_NOW.get('buttons').get('EXECUTE_BUTTON_TEXT'),
+            style='execute.TButton')
         self.status_var = tk.StringVar()
         self.status_label = ttk.Label(self.execute_pane,
                                       textvariable=self.status_var,
@@ -705,8 +730,9 @@ class App(tk.Frame):
             # No file selected
             return
         self.display_excel_var.set(os.path.basename(self.excel_name))
-        self._set_status_var_text(CHOOSED_XLSX_FILE +
-                                  os.path.basename(self.excel_name))
+        self._set_status_var_text(
+            DICT_NOW.get('info').get('CHOOSED_XLSX_FILE') +
+            os.path.basename(self.excel_name))
         self.excel_matrix = XlsxFile(self.excel_name).matrix
         if self._validate_excel_matrix():
             self.name_list = list(self.excel_matrix[0])
@@ -721,8 +747,9 @@ class App(tk.Frame):
             return
         self.fdi_name = filename
         self.display_fdi_var.set(os.path.basename(self.fdi_name))
-        self._set_status_var_text(CHOOSED_FDI_FILE +
-                                  os.path.basename(self.fdi_name))
+        self._set_status_var_text(
+            DICT_NOW.get('info').get('CHOOSED_FDI_FILE') +
+            os.path.basename(self.fdi_name))
         self.output_file_entry.delete('0', 'end')
         self.output_file_entry.insert('0', os.path.basename(self.fdi_name))
 
@@ -751,17 +778,20 @@ class App(tk.Frame):
                 self._read_configs()
                 # Remove title line from matrix
                 processing_raw_data(self.excel_matrix[1:], PROCESSING_DATA_FILE)
-                self._set_status_var_text(RAW_DATA_PROCESSED_INFO)
+                self._set_status_var_text(
+                    DICT_NOW.get('info').get('RAW_DATA_PROCESSED_INFO'))
 
                 generate_info_file(PROCESSING_DATA_FILE,
                                    INFO_FILE,
                                    self.name_list,
                                    self.dynamic_area.choosed_color_dict)
-                self._set_status_var_text(INFO_FILE_PROCESSED_INFO)
+                self._set_status_var_text(
+                    DICT_NOW.get('info').get('INFO_FILE_PROCESSED_INFO'))
 
                 out_file = self.output_file_entry.get().strip()
                 generate_new_fdi(self.fdi_name, INFO_FILE, out_file)
-                self._set_status_var_text(FDI_FILE_GENERATED_INFO)
+                self._set_status_var_text(
+                    DICT_NOW.get('info').get('FDI_FILE_GENERATED_INFO'))
 
                 self._set_status_var_text('Done!  Output file:  ./output/%s' %
                                     os.path.basename(out_file))
@@ -770,37 +800,38 @@ class App(tk.Frame):
 
     def _check_params(self):
         """Validate files and contents before running"""
-        self._set_status_var_text(STARTING_VALIDATING_DATA_INFO)
+        self._set_status_var_text(
+            DICT_NOW.get('info').get('STARTING_VALIDATING_DATA_INFO'))
 
         # Check if excel file already choosed
         if not self.excel_name:
             self._display_error(
-                NO_XLSX_FILE_ERROR_TITLE,
-                NO_XLSX_FILE_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('NO_XLSX_FILE_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('NO_XLSX_FILE_ERROR_MESSAGE')
             )
             return False
 
         # Check if fdi file was choosed
         if not self.fdi_name:
             self._display_error(
-                NO_FDI_FILE_ERROR_TITLE,
-                NO_FDI_FILE_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('NO_FDI_FILE_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('NO_FDI_FILE_ERROR_MESSAGE')
             )
             return False
 
         # Check if data was successfully extracted from excel file
         if not self.excel_matrix:
             self._display_error(
-                INVALID_XLSX_FILE_ERROR_TITLE,
-                INVALID_XLSX_FILE_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('INVALID_XLSX_FILE_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('INVALID_XLSX_FILE_ERROR_MESSAGE')
             )
             return False
 
         # Check if all categories have colors
         if len(self.name_list) != len(self.dynamic_area.choosed_color_dict):
             self._display_error(
-                NOT_ALL_COLOR_CHOOSED_ERROR_TITLE,
-                NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('NOT_ALL_COLOR_CHOOSED_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('NOT_ALL_COLOR_CHOOSED_ERROR_MESSAGE')
             )
             return False
 
@@ -808,8 +839,8 @@ class App(tk.Frame):
         out_file = self.output_file_entry.get().strip()
         if not out_file:
             self._display_error(
-                NO_OUTFILE_ERROR_TITLE,
-                NO_OUTFILE_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('NO_OUTFILE_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('NO_OUTFILE_ERROR_MESSAGE')
             )
             return False
 
@@ -817,7 +848,8 @@ class App(tk.Frame):
         if not self._validate_xlsx_consistent_with_fdi():
             return False
 
-        self._set_status_var_text(FINISHED_VALIDATING_DATA_INFO)
+        self._set_status_var_text(
+            DICT_NOW.get('info').get('FINISHED_VALIDATING_DATA_INFO'))
 
         # All check passed
         return True
@@ -829,8 +861,8 @@ class App(tk.Frame):
                                in self.excel_matrix]
         if len(set(each_tuple_len_list)) != 1:
             self._display_error(
-                INVALID_XLSX_FILE_ERROR_TITLE,
-                INVALID_XLSX_FILE_ERROR_MESSAGE
+                DICT_NOW.get('errors').get('INVALID_XLSX_FILE_ERROR_TITLE'),
+                DICT_NOW.get('errors').get('INVALID_XLSX_FILE_ERROR_MESSAGE')
             )
             return False
 
@@ -843,14 +875,14 @@ class App(tk.Frame):
                 continue
             except TypeError:
                 self._display_error(
-                    BLANK_CELL_ERROR_TITLE,
-                    BLANK_CELL_ERROR_MESSAGE % (1, i+1)
+                    DICT_NOW.get('errors').get('BLANK_CELL_ERROR_TITLE'),
+                    DICT_NOW.get('errors').get('BLANK_CELL_ERROR_MESSAGE % (1, i+1)')
                 )
                 return False
             else:
                 self._display_error(
-                    XLSX_FIRST_LINE_ERROR_TITLE,
-                    XLSX_FIRST_LINE_ERROR_MESSAGE % (1, i+1)
+                    DICT_NOW.get('errors').get('XLSX_FIRST_LINE_ERROR_TITLE'),
+                    DICT_NOW.get('errors').get('XLSX_FIRST_LINE_ERROR_MESSAGE % (1, i+1)')
                 )
                 return False
 
@@ -861,14 +893,14 @@ class App(tk.Frame):
                     float(cell)
                 except ValueError:
                     self._display_error(
-                        XLSX_NOT_FIRST_LINE_ERROR_TITLE,
-                        XLSX_NOT_FIRST_LINE_ERROR_MESSAGE % (i+2, j+1)
+                        DICT_NOW.get('errors').get('XLSX_NOT_FIRST_LINE_ERROR_TITLE'),
+                        DICT_NOW.get('errors').get('XLSX_NOT_FIRST_LINE_ERROR_MESSAGE % (i+2, j+1)')
                     )
                     return False
                 except TypeError:
                     self._display_error(
-                        BLANK_CELL_ERROR_TITLE,
-                        BLANK_CELL_ERROR_MESSAGE % (i+2, j+1)
+                        DICT_NOW.get('errors').get('BLANK_CELL_ERROR_TITLE'),
+                        DICT_NOW.get('errors').get('BLANK_CELL_ERROR_MESSAGE % (i+2, j+1)')
                     )
                     return False
 
@@ -886,8 +918,10 @@ class App(tk.Frame):
         print(len(self.excel_matrix))
         if len(hap_lines) != (len(self.excel_matrix) - 1):
             self._display_error(
-                XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE,
-                XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE)
+                DICT_NOW.get('errors').get(
+                    'XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_TITLE'),
+                DICT_NOW.get('errors').get(
+                    'XLSX_DATA_AND_FDI_HAP_NUMBER_DISCORDANCE_MESSAGE)'))
             return False
         return True
 
