@@ -3,17 +3,16 @@ Fdi Generator
 
 A GUI tool for quickly generating new fdi files with different proportions and colors.
 
-**WARNING**: This program was originally a part of [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repository. For maintenance convenience, it was seperated out to this standalone repo. Further updates will be posted here, rather than in [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repo.
+The latest zip file download link: [FdiGenerator.zip](https://raw.githubusercontent.com/zxjsdp/FdiGenerator-zips/master/FdiGenerator.zip)
 
+![FdiGenerator GIF](resources/FdiGenerator.gif)
+
+**WARNING**: This program was originally a part of [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repository. For maintenance convenience, it was seperated out to this standalone repo. Further updates will be posted here, rather than in [bioinfo-scripts](https://github.com/zxjsdp/bioinfo-scripts/tree/master/Haplotype_Related/FdiGenerator) repo.
 
 Screenshot
 ----------
 
 ![Fdi Generator](resources/fdi_generator.png)
-
-Demo GIF:
-
-![FdiGenerator GIF](resources/FdiGenerator.gif)
 
 Display fdi files with Network program
 --------------------------------------
@@ -33,7 +32,7 @@ Prerequisites:
 
 Usage:
 
-- Download the zip file: [FdiGenerator.zip](https://raw.githubusercontent.com/zxjsdp/FdiGenerator-zips/master/FdiGenerator.zip)
+- Download the latest zip file: [FdiGenerator.zip](https://raw.githubusercontent.com/zxjsdp/FdiGenerator-zips/master/FdiGenerator.zip)
 - Unzip and double click `FdiGenerator.pyw` or `fdi_generator.py` to run.
 - If you want to see error messages, `cd` to the dir where python script is in and run this command on terminal (recommended):
 
